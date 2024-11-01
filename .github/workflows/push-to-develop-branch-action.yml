@@ -1,0 +1,22 @@
+name: Push to Develop Branch Action
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    uses: EROODA/erooda-fe/.github/workflows/npm-build-action.yml@main
+    secrets: inherit
+    with:
+      build-script: build
+      branch-ref: develop
+      build-artifact-name: build-output
+
+  deploy:
+    needs: build
+    uses: EROODA/erooda-fe/.github/workflows/build-s3-deploy-action.yml@main
+    secrets: inherit
+    with:
+      build-artifact-name: build-output
